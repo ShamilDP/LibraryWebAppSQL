@@ -1,0 +1,18 @@
+[
+  {
+    "bookId": "1",
+    "bookName": "Core Java",
+    "copyCount": "5",
+    "author": "Cay S. Horstman",
+    "coverImage": " https://images-na.ssl-images-amazon.com/images/I/41Brz5j2rKL._SX381_BO1,204,203,200_.jpg ",
+    "addedBy": "USER_001"
+  },
+  {
+    "bookId": "2",
+    "bookName": "Clean Code",
+    "copyCount": "4",
+    "author": "Robert C. Martin",
+    "coverImage": " https://images-na.ssl-images-amazon.com/images/I/41SMo7KEbhL._SX258_BO1,204,203,200.jpg ",
+    "addedBy": "USER_002"
+  }
+]
