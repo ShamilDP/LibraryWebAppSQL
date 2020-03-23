@@ -1,8 +1,10 @@
-com/example/library/Controller$2.class
-com/example/library/IndexControl$1.class
-com/example/library/Controller.class
-com/example/library/Controller$1.class
-com/example/library/LoginControl$1.class
-com/example/library/AddBookControl$1.class
-com/example/library/Controller$3.class
+com/example/library/AddBookControl.class
+com/example/library/LoginControl.class
+com/example/library/AddBook.class
+com/example/library/dao/BookDAO.class
+com/example/library/Login.class
+com/example/library/IndexControl.class
+com/example/library/LogOutControl.class
+com/example/library/User.class
+com/example/library/dao/impl/JdbcBookDAO.class
 com/example/library/Book.class

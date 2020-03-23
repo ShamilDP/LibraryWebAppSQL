@@ -1,19 +1,22 @@
 package com.example.library;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.library.dao.BookDAO;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.MongoClient;
+import org.json.simple.JSONObject;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
+import javax.servlet.http.HttpSession;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 @Controller
 public class LoginControl {
@@ -23,54 +26,46 @@ public class LoginControl {
         return loggedUser;
     }
 
-    public void setLoggedUser(String loggedUser) {
-        this.loggedUser = loggedUser;
-    }
-
     @GetMapping("/login")
-    public String form(Model model) {
-
+    public String form() {
         return "login";
     }
-
-
-
     @PostMapping("/login")
     public String submit(@ModelAttribute Login login, Model model, HttpServletRequest request) {
-
+        HttpSession session;
         String user = request.getParameter("userName");
         String password = request.getParameter("password");
 
         if(checkLogin(user,password)){
-
+            session = request.getSession();
+            session.setAttribute("name", loggedUser);
+            String name = "Hi  " + (String) session.getAttribute("name");
+            model.addAttribute("checkLogin",name);
             return "addBook";
         }else{
             return "login";
         }
-
     }
 
     public boolean checkLogin(String user, String password){
         boolean found = false;
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            InputStream inputStream = new FileInputStream(new File("/home/shamil/IdeaProjects/LibraryWebApp/src/main/resources/user-list.json"));
-            System.out.println(inputStream);
-            TypeReference<List<Login>> typeReference = new TypeReference<List<Login>>(){};
-            List<Login> log = mapper.readValue(inputStream,typeReference);
-            for (Login l: log){
 
-                if ((l.getUserId().equals(user)) && (l.getPassword().equals(password))){
-                    found = true;
-                    System.out.println("Checking:"+l.getUserId());
-                    //   setLoggedUser(l.getUserId());
-                    loggedUser = l.getUserId();
-                    break;
-                }
+        ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
+        BookDAO bookDAO = (BookDAO) context.getBean("bookDAO");
+
+        ArrayList<User> userList = bookDAO.findByUserId();
+        for (User userCheck: userList) {
+            if ((userCheck.getUserId().equals(user)) && (userCheck.getPassword().equals(password))){
+                found = true;
+                loggedUser = user;
+                break;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+
         }
+        System.out.println(userList.get(0).getUserId()+"Bye");
+
         return found;
+
+
     }
 }
